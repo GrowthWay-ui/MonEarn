@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MonEarn</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<!-- Monetag rewarded ads SDK (zone 12056670). Copy the exact tag from your Monetag dashboard if it differs. -->
+<script src="//libtl.com/sdk.js" data-zone="12056670" data-sdk="show_12056670"></script>
+<style>
+:root{
+  --bg:#0b0b0f; --card:#14141c; --card2:#1b1b26; --line:#262633;
+  --yellow:#f5c518; --yellow2:#e0a800; --green:#22c55e; --red:#ef4444;
+  --text:#f4f4f7; --muted:#8b8b9c;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif;min-height:100vh;padding-bottom:90px}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:14px 18px}
+.logo{font-size:26px;font-weight:900;letter-spacing:-.5px}
+.logo span{color:var(--yellow)}
+.pill{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:8px 16px;color:var(--yellow);font-weight:800}
+main{padding:18px;max-width:560px;margin:0 auto}
+.tab{display:none}.tab.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;margin-bottom:16px}
+h2{font-size:15px;color:var(--muted);font-weight:700;margin:6px 0 6px}
+.sub{color:var(--muted);font-size:14px;line-height:1.45;margin-bottom:14px}
+.hello{color:var(--muted)}
+.name{font-size:24px;font-weight:800;margin-bottom:14px}
+.bal-label{color:var(--muted);font-size:13px;letter-spacing:2px}
+.bal{font-size:52px;font-weight:900;color:var(--yellow);margin:4px 0 14px}
+.stats{display:flex;gap:26px}
+.stats b{display:block;color:var(--green);font-size:19px}
+.stats small{color:var(--muted)}
+.chip{display:inline-block;margin-top:14px;border:1px solid #5b4a10;background:#241f0c;color:var(--yellow);border-radius:20px;padding:7px 14px;font-size:14px}
+.btn{width:100%;border:0;border-radius:20px;padding:18px;font-size:20px;font-weight:900;color:#1a1400;background:linear-gradient(180deg,var(--yellow),var(--yellow2));box-shadow:0 8px 28px rgba(245,197,24,.22);cursor:pointer;font-family:inherit}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.45;box-shadow:none;cursor:not-allowed}
+.btn.small{width:auto;padding:10px 18px;font-size:15px;border-radius:14px}
+.btn.green{background:linear-gradient(180deg,#2fd36b,#16a34a);color:#04200f;box-shadow:none}
+.btn.ghost{background:var(--card2);color:var(--muted);box-shadow:none}
+.row{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;cursor:pointer}
+.ico{width:54px;height:54px;border-radius:16px;background:#241f14;display:grid;place-items:center;font-size:26px;flex:none}
+.row .t{flex:1}
+.row .t b{display:block;font-size:17px}
+.row .t span{color:var(--muted);font-size:14px}
+.row .amt{color:var(--yellow);font-weight:900}
+.bar{height:10px;background:var(--card2);border-radius:6px;overflow:hidden;margin:12px 0 6px}
+.bar i{display:block;height:100%;width:0;background:var(--yellow);transition:width .3s}
+.barinfo{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;margin-bottom:12px}
+.linkbox{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin:10px 0 14px}
+.linkbox span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.grid2 .card{margin:0;text-align:center;padding:16px}
+.grid2 b{display:block;font-size:26px;color:var(--yellow)}
+.grid2 small{color:var(--muted)}
+.rule{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.rule:last-of-type{border-bottom:0}
+.rule .t{flex:1}.rule .t small{color:var(--muted);display:block}
+.ok{color:var(--green);font-size:22px}.no{color:var(--red);font-size:22px}
+input{width:100%;background:var(--card2);border:1px solid var(--line);color:var(--text);border-radius:14px;padding:14px;font-size:16px;margin-bottom:10px;font-family:inherit}
+input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
+.note{border:1px solid #5a1f1f;background:#241012;color:#ffb4b4;border-radius:14px;padding:12px 14px;margin:6px 0 14px;font-size:14px}
+.info{text-align:center;color:var(--muted);font-size:14px;line-height:1.9;margin-top:10px}
+.info a{color:var(--yellow);text-decoration:none;font-weight:700}
+nav{position:fixed;bottom:0;left:0;right:0;background:#0e0e14;border-top:1px solid var(--line);display:flex;padding:8px 4px calc(8px + env(safe-area-inset-bottom));z-index:6}
+nav button{flex:1;background:none;border:0;color:var(--muted);font-size:12px;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px}
+nav button i{font-style:normal;font-size:24px;filter:grayscale(.6)}
+nav button.on{color:var(--yellow);font-weight:700}
+nav button.on i{filter:none}
+#ad{position:fixed;inset:0;background:rgba(5,5,8,.96);z-index:20;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
+#ad.show{display:flex}
+#ad .count{font-size:80px;font-weight:900;color:var(--yellow)}
+#ad p{color:var(--muted);margin:8px 0 20px}
+#toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%) translateY(20px);background:var(--card2);border:1px solid var(--line);padding:12px 20px;border-radius:14px;opacity:0;transition:.25s;z-index:30;pointer-events:none;max-width:88%;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Mon<span>Earn</span></div>
+  <div class="pill" id="topBal">₹0</div>
+</header>
+
+<main>
+  <!-- HOME -->
+  <section class="tab active" id="home">
+    <div class="card">
+      <div class="hello">Welcome back,</div>
+      <div class="name" id="uname">Friend</div>
+      <div class="bal-label">TOTAL BALANCE</div>
+      <div class="bal" id="bal">₹0</div>
+      <div class="stats">
+        <div><b id="sEarned">₹0</b><small>Total Earned</small></div>
+        <div><b id="sAds">0</b><small>Ads Watched</small></div>
+        <div><b id="sRefs">0</b><small>Referrals</small></div>
+      </div>
+      <div class="chip">🎬 <span id="sToday">0</span> ads watched today</div>
+    </div>
+
+    <button class="btn" data-ad="5">🎬 Watch Ad &amp; Earn ₹5</button>
+
+    <h2 style="margin-top:22px">QUICK EARN</h2>
+    <div class="card row" data-go="refer">
+      <div class="ico">👥</div>
+      <div class="t"><b>Refer a Friend</b><span>Earn ₹10 for each referral</span></div>
+      <div class="amt">+₹10</div>
+    </div>
+    <a class="card row" href="https://t.me/DataSellAppLink" target="_blank" rel="noopener">
+      <div class="ico">💽</div>
+      <div class="t"><b>Sell Your Data &amp; Earn</b><span>Open the DataSell channel</span></div>
+      <div class="amt">›</div>
+    </a>
+  </section>
+
+  <!-- TASKS -->
+  <section class="tab" id="tasks">
+    <h2>TASK SECTION</h2>
+    <p class="sub">Watch 3 ads in a row and get ₹5 in your wallet.</p>
+    <div class="card">
+      <div class="row" style="cursor:default">
+        <div class="ico">🎬</div>
+        <div class="t"><b>Watch Ad &amp; Earn ₹5</b><span>Watch 3 ads to get paid</span></div>
+        <div class="amt">+₹5</div>
+      </div>
+      <div style="height:14px"></div>
+      <button class="btn" data-ad="5">▶ Watch Ad &amp; Earn ₹5</button>
+    </div>
+  </section>
+
+  <!-- EARN MORE -->
+  <section class="tab" id="more">
+    <h2>EARN MORE</h2>
+    <p class="sub">More ways to grow your balance.</p>
+
+    <div class="card">
+      <div class="row" style="cursor:default">
+        <div class="ico">💽</div>
+        <div class="t"><b>Sell Your Data &amp; Earn</b><span>Share your data and get paid</span></div>
+      </div>
+      <div style="height:14px"></div>
+      <a class="btn" style="display:block;text-align:center;text-decoration:none" href="https://t.me/DataSellAppLink" target="_blank" rel="noopener">Sell Data Now</a>
+    </div>
+
+    <div class="card">
+      <div class="row" style="cursor:default">
+        <div class="ico">👥</div>
+        <div class="t"><b>Refer &amp; Earn</b><span>Earn ₹10 per referral</span></div>
+      </div>
+      <div class="linkbox"><span class="refLink">t.me/MoneAdEarn_bot</span><button class="btn small" data-copy>Copy</button></div>
+      <button class="btn" data-share>📤 Share &amp; Invite Friends</button>
+    </div>
+  </section>
+
+  <!-- REFER -->
+  <section class="tab" id="refer">
+    <div class="card" style="text-align:center">
+      <div class="bal" id="rCount" style="font-size:64px;margin:0">0</div>
+      <div class="hello">Friends Referred</div>
+      <p class="sub" style="margin:12px 0 0">Earn <b style="color:var(--yellow)">₹10</b> for every friend who joins using your link. 5 referrals are needed to unlock withdrawal.</p>
+    </div>
+    <div class="grid2">
+      <div class="card"><b id="rEarn">₹0</b><small>Earned from Referrals</small></div>
+      <div class="card"><b id="rNeed">5</b><small>Referrals Needed</small></div>
+    </div>
+    <h2>Your Invite Link</h2>
+    <div class="linkbox"><span class="refLink">t.me/MoneAdEarn_bot</span><button class="btn small" data-copy>Copy</button></div>
+    <button class="btn" data-share>📤 Share &amp; Invite Friends</button>
+  </section>
+
+  <!-- WITHDRAW -->
+  <section class="tab" id="withdraw">
+    <div class="card">
+      <div class="name" style="margin-bottom:4px">💸 Withdraw Earnings</div>
+      <p class="sub">Transfer your balance directly to UPI</p>
+
+      <div class="rule"><div style="font-size:26px">💰</div>
+        <div class="t"><b>Minimum ₹2,000</b><small>Current: <span id="wBal">₹0</span></small></div>
+        <div id="wOk1" class="no">✖</div></div>
+      <div class="rule"><div style="font-size:26px">👥</div>
+        <div class="t"><b>Minimum 5 referrals</b><small>Current: <span id="wRefs">0</span> friends</small></div>
+        <div id="wOk2" class="no">✖</div></div>
+      <div class="rule"><div style="font-size:26px">🔒</div>
+        <div class="t"><b>Maximum ₹20,000</b><small>Per withdrawal</small></div>
+        <div class="ok">✔</div></div>
+
+      <div class="note" id="wNote">🔒 Complete both criteria above to unlock withdrawal</div>
+
+      <input id="wUpi" placeholder="UPI ID (example: name@upi)" autocomplete="off">
+      <input id="wAmt" type="number" inputmode="numeric" placeholder="Amount (₹2,000 – ₹20,000)">
+      <button class="btn" id="wBtn" disabled>Withdraw</button>
+    </div>
+    <div class="info">
+      🕐 Processing takes 24–48 hours<br>
+      📞 Support: <a href="https://t.me/TheAK" target="_blank" rel="noopener">@TheAK</a>
+    </div>
+  </section>
+</main>
+
+<!-- Ad overlay -->
+<div id="ad" role="dialog" aria-modal="true" aria-label="Ad">
+  <div style="font-size:48px">🎬</div>
+  <div class="count" id="adCount">5</div>
+  <p id="adMsg">Watch all 3 ads to earn.</p>
+  <button class="btn small ghost" id="adClose">Cancel</button>
+</div>
+
+<div id="toast" role="status"></div>
+
+<nav>
+  <button class="on" data-tab="home"><i>🏠</i>Home</button>
+  <button data-tab="tasks"><i>📢</i>Tasks</button>
+  <button data-tab="more"><i>🎯</i>Earn More</button>
+  <button data-tab="refer"><i>👥</i>Refer</button>
+  <button data-tab="withdraw"><i>💸</i>Withdraw</button>
+</nav>
+
+<script>
+const BOT = "MoneAdEarn_bot";
+const MIN_REFS = 5;
+const tg = window.Telegram && window.Telegram.WebApp;
+if (tg){ try{ tg.ready(); tg.expand(); }catch(e){} }
+const tgUser = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
+/* each user gets their own link so the bot can credit the inviter */
+const refLink = () => "https://t.me/" + BOT + (tgUser ? "?start=ref_" + tgUser.id : "");
+const REF_REWARD = 10, AD_REWARD = 5, AD_SECONDS = 5, MIN_W = 2000, MAX_W = 20000;
+const KEY = "monearn_state_v1";
+
+/* storage that never crashes if blocked */
+let mem = null;
+const store = {
+  get(){ try{ const v = localStorage.getItem(KEY); return v ? JSON.parse(v) : null }catch(e){ return mem } },
+  set(s){ try{ localStorage.setItem(KEY, JSON.stringify(s)) }catch(e){ mem = s } }
+};
+
+const today = () => new Date().toISOString().slice(0,10);
+let S = Object.assign({ balance:0, earned:0, ads:0, refs:0, adsToday:0, day:today(), name:"Friend" }, store.get() || {});
+/* name comes automatically from the Telegram account */
+if (tgUser){
+  S.name = [tgUser.first_name, tgUser.last_name].filter(Boolean).join(" ") || tgUser.username || "Friend";
+}
+if (S.day !== today()) { S.day = today(); S.adsToday = 0; }
+
+const $ = s => document.querySelector(s), $$ = s => document.querySelectorAll(s);
+const inr = n => "₹" + Number(n).toLocaleString("en-IN");
+const save = () => { store.set(S); render(); };
+
+function render(){
+  $("#topBal").textContent = inr(S.balance);
+  $("#bal").textContent = inr(S.balance);
+  $("#sEarned").textContent = inr(S.earned);
+  $("#sAds").textContent = S.ads;
+  $("#sRefs").textContent = S.refs;
+  $("#sToday").textContent = S.adsToday;
+  $("#rCount").textContent = S.refs;
+  $("#rEarn").textContent = inr(S.refs * REF_REWARD);
+  $("#rNeed").textContent = Math.max(0, MIN_REFS - S.refs);
+  $("#uname").textContent = S.name;
+  $("#wBal").textContent = inr(S.balance);
+  const balOk = S.balance >= MIN_W, refOk = S.refs >= MIN_REFS, unlocked = balOk && refOk;
+  $("#wOk1").textContent = balOk ? "✔" : "✖";
+  $("#wOk1").className = balOk ? "ok" : "no";
+  $("#wOk2").textContent = refOk ? "✔" : "✖";
+  $("#wOk2").className = refOk ? "ok" : "no";
+  $("#wRefs").textContent = S.refs;
+  $$(".refLink").forEach(e => e.textContent = refLink().replace("https://",""));
+  $("#wNote").style.display = unlocked ? "none" : "block";
+  $("#wBtn").disabled = !unlocked;
+}
+
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast.id); toast.id = setTimeout(() => t.classList.remove("show"), 2400);
+}
+
+/* tabs */
+function go(id){
+  $$(".tab").forEach(t => t.classList.toggle("active", t.id === id));
+  $$("nav button").forEach(b => b.classList.toggle("on", b.dataset.tab === id));
+  window.scrollTo({top:0});
+}
+$$("nav button").forEach(b => b.onclick = () => go(b.dataset.tab));
+$$("[data-go]").forEach(e => e.onclick = () => go(e.dataset.go));
+
+/* Rewarded ads (Monetag). One tap = 3 ads in a row; reward is paid only after all 3 finish. */
+const AD_COUNT = 3;
+let adBusy = false, adCancel = false, adReward = 0;
+async function startAd(reward){
+  if (adBusy) return;
+  if (typeof show_12056670 !== "function"){ toast("Ads are not available right now. Try again later."); return; }
+  adBusy = true; adCancel = false;
+  $("#ad").classList.add("show");
+  try{
+    for (let i = 1; i <= AD_COUNT; i++){
+      if (adCancel) throw new Error("cancelled");
+      $("#adCount").textContent = i + "/" + AD_COUNT;
+      $("#adMsg").textContent = "Loading ad " + i + " of " + AD_COUNT + ". Watch each ad fully to earn.";
+      await show_12056670();   // resolves only when the user has watched the ad
+    }
+    adReward = reward;
+    rewardAd();
+  }catch(e){
+    toast(adCancel ? "Cancelled. No reward." : "Ad not completed. No reward.");
+  }finally{
+    adBusy = false;
+    $("#ad").classList.remove("show");
+  }
+}
+function rewardAd(){
+  S.balance += adReward; S.earned += adReward; S.ads += AD_COUNT; S.adsToday += AD_COUNT;
+  save(); toast("+" + inr(adReward) + " added to your wallet");
+}
+$("#adClose").onclick = () => { adCancel = true; toast("Cancelling after the current ad"); };
+$$("[data-ad]").forEach(b => b.onclick = () => startAd(Number(b.dataset.ad)));
+
+/* copy + share */
+$$("[data-copy]").forEach(b => b.onclick = async () => {
+  try{ await navigator.clipboard.writeText(refLink()); toast("Link copied"); }
+  catch(e){ prompt("Copy this link:", refLink()); }
+});
+$$("[data-share]").forEach(b => b.onclick = async () => {
+  const text = "Earn money by watching ads on MonEarn. Join here:";
+  if (navigator.share){ try{ await navigator.share({ title:"MonEarn", text, url:refLink() }); }catch(e){} }
+  else window.open("https://t.me/share/url?url=" + encodeURIComponent(refLink()) + "&text=" + encodeURIComponent(text), "_blank");
+});
+
+/* withdraw */
+$("#wBtn").onclick = () => {
+  const upi = $("#wUpi").value.trim(), amt = Number($("#wAmt").value);
+  if (S.refs < MIN_REFS) return toast("You need 5 referrals to withdraw");
+  if (!/^[\w.\-]{2,}@[a-zA-Z]{2,}$/.test(upi)) return toast("Enter a valid UPI ID");
+  if (!amt || amt < MIN_W) return toast("Minimum withdrawal is " + inr(MIN_W));
+  if (amt > MAX_W) return toast("Maximum withdrawal is " + inr(MAX_W));
+  if (amt > S.balance) return toast("Not enough balance");
+  S.balance -= amt; save();
+  $("#wAmt").value = "";
+  toast("Request sent. Processing takes 24–48 hours.");
+};
+
+render();
+</script>
+</body>
+</html>
